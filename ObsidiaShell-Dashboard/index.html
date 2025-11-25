@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObsidiaShell Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1>ObsidiaShell</h1>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#ingestion" class="nav-item" data-page="ingestion">
+                <i class="fas fa-upload"></i>
+                <span>Ingestion</span>
+            </a>
+            <a href="#domaines" class="nav-item" data-page="domaines">
+                <i class="fas fa-layer-group"></i>
+                <span>Domaines</span>
+            </a>
+            <a href="#pipeline" class="nav-item" data-page="pipeline">
+                <i class="fas fa-project-diagram"></i>
+                <span>Pipeline</span>
+            </a>
+            <a href="#graphiti" class="nav-item" data-page="graphiti">
+                <i class="fas fa-network-wired"></i>
+                <span>Graphiti</span>
+            </a>
+            <a href="#fastgpt" class="nav-item" data-page="fastgpt">
+                <i class="fas fa-robot"></i>
+                <span>FastGPT</span>
+            </a>
+            <a href="#danswer" class="nav-item" data-page="danswer">
+                <i class="fas fa-search"></i>
+                <span>Danswer</span>
+            </a>
+            <a href="#export" class="nav-item" data-page="export">
+                <i class="fas fa-file-export"></i>
+                <span>Export</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="service-status">
+                <div class="status-item" id="status-graphiti">
+                    <span class="status-dot"></span>
+                    <span>Graphiti</span>
+                </div>
+                <div class="status-item" id="status-fastgpt">
+                    <span class="status-dot"></span>
+                    <span>FastGPT</span>
+                </div>
+                <div class="status-item" id="status-danswer">
+                    <span class="status-dot"></span>
+                    <span>Danswer</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Main Content Area -->
+    <main class="main-content" id="main-content">
+        <!-- Dashboard Page -->
+        <div class="page" id="page-dashboard">
+            <div class="page-header">
+                <h2>Dashboard</h2>
+                <p>Vue d'ensemble du système ObsidiaShell</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--color-bg-1);">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-documents">0</h3>
+                        <p>Documents Total</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--color-bg-2);">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>24</h3>
+                        <p>Domaines</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--color-bg-3);">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-nodes">0</h3>
+                        <p>Nœuds Graphe</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--color-bg-4);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-status">3/3</h3>
+                        <p>Services Actifs</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Activité Récente</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="activity-log" id="activity-log">
+                            <div class="activity-item">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Système démarré</span>
+                                <time>Il y a quelques instants</time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Statut des Services</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="service-health">
+                            <div class="health-item" id="health-graphiti">
+                                <div class="health-header">
+                                    <span class="health-name">Graphiti</span>
+                                    <span class="status status--info">Vérification...</span>
+                                </div>
+                                <p class="health-desc">Graph Intelligence</p>
+                            </div>
+                            <div class="health-item" id="health-fastgpt">
+                                <div class="health-header">
+                                    <span class="health-name">FastGPT</span>
+                                    <span class="status status--info">Vérification...</span>
+                                </div>
+                                <p class="health-desc">LLM &amp; Classification</p>
+                            </div>
+                            <div class="health-item" id="health-danswer">
+                                <div class="health-header">
+                                    <span class="health-name">Danswer</span>
+                                    <span class="status status--info">Vérification...</span>
+                                </div>
+                                <p class="health-desc">RAG Search</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ingestion Page -->
+        <div class="page" id="page-ingestion" style="display: none;">
+            <div class="page-header">
+                <h2>Ingestion de Documents</h2>
+                <p>Uploadez et traitez vos documents</p>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <div class="upload-zone" id="upload-zone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Glissez-déposez vos fichiers ici</h3>
+                        <p>ou cliquez pour sélectionner (PDF, DOCX, MD, TXT)</p>
+                        <input type="file" id="file-input" multiple accept=".pdf,.docx,.md,.txt" style="display: none;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Lot de traitement</label>
+                        <select id="lot-select" class="form-control">
+                            <option value="maps_first">maps_first</option>
+                            <option value="lot_A_ancien">lot_A_ancien</option>
+                            <option value="lot_B_intermediaire">lot_B_intermediaire</option>
+                            <option value="lot_C_recent">lot_C_recent</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Domaines Obsidia</label>
+                        <div class="domain-selector" id="domain-selector"></div>
+                    </div>
+
+                    <div id="file-list" class="file-list"></div>
+
+                    <button class="btn btn--primary btn--full-width" id="upload-btn" disabled>
+                        <i class="fas fa-upload"></i> Lancer l'ingestion
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Domaines Page -->
+        <div class="page" id="page-domaines" style="display: none;">
+            <div class="page-header">
+                <h2>Domaines Obsidia</h2>
+                <p>24 domaines de connaissances</p>
+            </div>
+
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="domain-search" placeholder="Rechercher un domaine..." class="form-control">
+            </div>
+
+            <div class="domains-grid" id="domains-grid"></div>
+        </div>
+
+        <!-- Pipeline Page -->
+        <div class="page" id="page-pipeline" style="display: none;">
+            <div class="page-header">
+                <h2>Pipeline de Traitement</h2>
+                <p>Visualisation et contrôle du pipeline d'ingestion</p>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <div class="pipeline-controls">
+                        <button class="btn btn--primary" id="pipeline-start">
+                            <i class="fas fa-play"></i> Lancer
+                        </button>
+                        <button class="btn btn--secondary" id="pipeline-pause">
+                            <i class="fas fa-pause"></i> Pause
+                        </button>
+                        <button class="btn btn--outline" id="pipeline-stop">
+                            <i class="fas fa-stop"></i> Arrêter
+                        </button>
+                    </div>
+
+                    <div class="pipeline-visualization">
+                        <div class="pipeline-step" id="step-ingest">
+                            <div class="step-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <h4>Ingest</h4>
+                            <span class="status status--info">En attente</span>
+                        </div>
+                        <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="pipeline-step" id="step-classify">
+                            <div class="step-icon">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <h4>Classify</h4>
+                            <span class="status status--info">En attente</span>
+                        </div>
+                        <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="pipeline-step" id="step-index">
+                            <div class="step-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h4>Index</h4>
+                            <span class="status status--info">En attente</span>
+                        </div>
+                        <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="pipeline-step" id="step-graph">
+                            <div class="step-icon">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <h4>Graph</h4>
+                            <span class="status status--info">En attente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__header">
+                    <h3>Logs du Pipeline</h3>
+                </div>
+                <div class="card__body">
+                    <div class="pipeline-logs" id="pipeline-logs">
+                        <div class="log-entry">En attente de démarrage...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graphiti Page -->
+        <div class="page" id="page-graphiti" style="display: none;">
+            <div class="page-header">
+                <h2>Graphiti - Visualisation</h2>
+                <p>Explorez le graphe de connaissances</p>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <div class="graph-controls">
+                        <input type="text" id="graph-search" placeholder="Rechercher un nœud..." class="form-control">
+                        <select id="graph-domain-filter" class="form-control">
+                            <option value="">Tous les domaines</option>
+                        </select>
+                        <button class="btn btn--primary" id="graph-refresh">
+                            <i class="fas fa-sync"></i> Actualiser
+                        </button>
+                    </div>
+
+                    <div class="graph-stats">
+                        <div class="stat-badge">
+                            <strong id="graph-nodes-count">0</strong> Nœuds
+                        </div>
+                        <div class="stat-badge">
+                            <strong id="graph-edges-count">0</strong> Relations
+                        </div>
+                        <div class="stat-badge">
+                            <strong id="graph-clusters-count">0</strong> Clusters
+                        </div>
+                    </div>
+
+                    <div id="graph-container" class="graph-container">
+                        <div class="graph-placeholder">
+                            <i class="fas fa-project-diagram"></i>
+                            <p>Chargement du graphe...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FastGPT Page -->
+        <div class="page" id="page-fastgpt" style="display: none;">
+            <div class="page-header">
+                <h2>FastGPT - LLM &amp; Classification</h2>
+                <p>Interagissez avec le modèle de langage</p>
+            </div>
+
+            <div class="fastgpt-container">
+                <div class="card chat-card">
+                    <div class="card__header">
+                        <h3>Chat</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-message assistant">
+                                <i class="fas fa-robot"></i>
+                                <div class="message-content">
+                                    <p>Bonjour ! Comment puis-je vous aider aujourd'hui ?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <textarea id="chat-input" class="form-control" placeholder="Posez votre question..." rows="3"></textarea>
+                            <button class="btn btn--primary" id="chat-send">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card classify-card">
+                    <div class="card__header">
+                        <h3>Classification</h3>
+                    </div>
+                    <div class="card__body">
+                        <textarea id="classify-input" class="form-control" placeholder="Entrez le texte à classifier..." rows="6"></textarea>
+                        <button class="btn btn--primary btn--full-width" id="classify-btn">
+                            <i class="fas fa-tags"></i> Classifier
+                        </button>
+                        <div id="classify-results" class="classify-results"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danswer Page -->
+        <div class="page" id="page-danswer" style="display: none;">
+            <div class="page-header">
+                <h2>Danswer - Recherche RAG</h2>
+                <p>Recherche sémantique avancée</p>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <div class="search-container">
+                        <input type="text" id="rag-search" placeholder="Recherche sémantique..." class="form-control">
+                        <button class="btn btn--primary" id="rag-search-btn">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </div>
+
+                    <div class="search-filters">
+                        <select id="rag-domain-filter" class="form-control">
+                            <option value="">Tous les domaines</option>
+                        </select>
+                        <select id="rag-lot-filter" class="form-control">
+                            <option value="">Tous les lots</option>
+                            <option value="maps_first">maps_first</option>
+                            <option value="lot_A_ancien">lot_A_ancien</option>
+                            <option value="lot_B_intermediaire">lot_B_intermediaire</option>
+                            <option value="lot_C_recent">lot_C_recent</option>
+                        </select>
+                    </div>
+
+                    <div id="search-results" class="search-results"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Page -->
+        <div class="page" id="page-export" style="display: none;">
+            <div class="page-header">
+                <h2>Export de Données</h2>
+                <p>Exportez vos données dans différents formats</p>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <div class="form-group">
+                        <label class="form-label">Format d'export</label>
+                        <select id="export-format" class="form-control">
+                            <option value="json">JSON</option>
+                            <option value="csv">CSV</option>
+                            <option value="pdf">PDF</option>
+                            <option value="markdown">Markdown</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Filtrer par domaine</label>
+                        <select id="export-domain" class="form-control">
+                            <option value="">Tous les domaines</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Filtrer par lot</label>
+                        <select id="export-lot" class="form-control">
+                            <option value="">Tous les lots</option>
+                            <option value="maps_first">maps_first</option>
+                            <option value="lot_A_ancien">lot_A_ancien</option>
+                            <option value="lot_B_intermediaire">lot_B_intermediaire</option>
+                            <option value="lot_C_recent">lot_C_recent</option>
+                        </select>
+                    </div>
+
+                    <div class="export-preview" id="export-preview">
+                        <h4>Aperçu</h4>
+                        <pre id="export-preview-content">Sélectionnez vos critères et cliquez sur "Générer l'aperçu"</pre>
+                    </div>
+
+                    <div class="export-actions">
+                        <button class="btn btn--secondary" id="export-preview-btn">
+                            <i class="fas fa-eye"></i> Générer l'aperçu
+                        </button>
+                        <button class="btn btn--primary" id="export-download-btn">
+                            <i class="fas fa-download"></i> Télécharger
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__header">
+                    <h3>Historique des Exports</h3>
+                </div>
+                <div class="card__body">
+                    <div id="export-history" class="export-history">
+                        <p class="text-muted">Aucun export récent</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
